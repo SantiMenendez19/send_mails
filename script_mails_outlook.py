@@ -41,7 +41,7 @@ server = smtplib.SMTP("SMTP.Office365.com",587)
 #Envio de mail
 try:
     password = getpass.getpass("Ingrese password: ")
-    lista = open("lista_test.txt",encoding="utf8") #Uso una lista de mails
+    lista = open(os.path.dirname(sys.argv[0]) + "/lista_test.txt",encoding="utf8") #Uso una lista de mails
     server.starttls()
     server.login(emisor_mail,password)
     for dir in lista:
