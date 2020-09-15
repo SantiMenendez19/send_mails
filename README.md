@@ -1,11 +1,11 @@
 # send_mails
 
+## Descripcion:
 Mini Proyecto de envio de mails hecho en Python.
-
-Descripcion:
-  El Script permite enviar mails utilizando el STMP de outlook o gmail a una lista de mails con archivos adjuntos.
   
-Parametros:
+El Script permite enviar mails utilizando el STMP de outlook o gmail a una lista de mails con archivos adjuntos.
+  
+## Parametros:
   Los parametros a configurar dentro del script son:
   - emisor_mail = "anon@mail.com"
   - receptor_mail = ["receiver@anon.com"]
