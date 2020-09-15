@@ -16,20 +16,8 @@ mensaje = "Hola, pruebo lo de Python"
 
 #Usando modulo email
 msg = MIMEMultipart()
-#msg['From'] = emisor_mail
-#msg['To'] = ','.join(receptor_mail)
-#msg['Subject'] = asunto_mail
-#msg.attach(MIMEText(mensaje, 'plain'))
 
-#Envio de adjuntos
-#path = os.path.dirname(sys.argv[0])
-#path_adjunto = path+"/adjunto/"
-#for (_,_,arch) in os.walk(path_adjunto):
-#    for archivo in arch:
-#        part = MIMEApplication(open(path_adjunto+"/"+archivo,"rb").read())
-#        part.add_header('Content-Disposition', 'attachment', filename=archivo)
-#        msg.attach(part)
-
+# Descomentar el servicio de mail a utilizar
 #SMTP Office 365
 server = smtplib.SMTP("SMTP.Office365.com",587)
 #SMTP Gmail
