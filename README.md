@@ -1,7 +1,7 @@
 # send_mails
 
 ## Descripcion:
-Mini Proyecto de envio de mails hecho en Python.
+Proyecto corto de envio de mails hecho en Python.
   
 El Script permite enviar mails utilizando el STMP de outlook o gmail a una lista de mails con archivos adjuntos.
   
