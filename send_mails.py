@@ -7,50 +7,72 @@ import os
 import sys
 
 # Funcion de envio de mail
-def send_mail(sender_mail, receptor_mail_list, subject, message, attachments_list=[], server_smtp="GMAIL", env_pass="PASSWORD"):
-    """ Funcion que envia un mail a una lista de destinatarios.
-        :param sender_mail: Correo electronico del remitente.
-        :param receptor_mail_list: Lista de correos electronicos de los destinatarios.
-        :param subject: Asunto del mail.
-        :param message: Mensaje del mail.
-        :param attachments_list: Lista de archivos adjuntos.
-        :param server_smtp: Servidor SMTP.
-        :param env_pass: Variable de entorno que contiene la contraseña. Si es None se le solicitara en la consola.
-        :return: None
+def send_mail(
+    sender_mail,
+    receptor_mail_list,
+    subject,
+    message,
+    attachments_list=[],
+    server_smtp="AWSSES",
+    server_host_smtp="",
+    user_host_smtp="",
+    env_pass="PASSWORD_SMTP",
+):
+    """Funcion que envia un mail a una lista de destinatarios.
+    :param sender_mail: Correo electronico del remitente.
+    :param receptor_mail_list: Lista de correos electronicos de los destinatarios.
+    :param subject: Asunto del mail.
+    :param message: Mensaje del mail.
+    :param attachments_list: Lista de archivos adjuntos.
+    :param server_smtp: Servidor SMTP.
+    :param env_pass: Variable de entorno que contiene la contraseña. Si es None se le solicitara en la consola.
+    :return: None
     """
     if server_smtp == "GMAIL":
         # SMTP Gmail
         server = smtplib.SMTP("smtp.gmail.com", 587)
     elif server_smtp == "OFFICE365":
         # SMTP Office 365
-        server = smtplib.SMTP("SMTP.Office365.com",587)
+        server = smtplib.SMTP("SMTP.Office365.com", 587)
+    elif server_smtp == "AWSSES":
+        server = smtplib.SMTP(server_host_smtp, 587)
     try:
         if env_pass is not None:
             password = os.environ[env_pass]
         else:
-            password = getpass.getpass("Ingrese password: ")
+            return 1  # Error no hay contraseña
+            # password = getpass.getpass("Ingrese password: ")
         server.starttls()
-        server.login(sender_mail, password)
+        if server_smtp == "AWSSES":
+            server.login(user_host_smtp, password)
+        else:
+            server.login(sender_mail, password)
         # Armado del mensaje
         msg = MIMEMultipart()
-        msg['From'] = sender_mail
-        msg['To'] = ','.join(receptor_mail_list)
-        msg['Subject'] = subject
-        msg.attach(MIMEText(message, 'plain'))
+        msg["From"] = sender_mail
+        msg["To"] = ",".join(receptor_mail_list)
+        msg["Subject"] = subject
+        msg.attach(MIMEText(message, "plain"))
         # Envio de adjuntos
         if len(attachments_list) > 0:
             for filepath in attachments_list:
                 attachment = MIMEApplication(open(filepath, "rb").read())
-                attachment.add_header('Content-Disposition', 'attachment', filename=os.path.basename(filepath))
+                attachment.add_header(
+                    "Content-Disposition",
+                    "attachment",
+                    filename=os.path.basename(filepath),
+                )
                 msg.attach(attachment)
         # Enviar mail
         print(f"Se enviara el mail a la direccion: {receptor_mail_list}")
-        server.sendmail(msg['From'], receptor_mail_list, msg.as_string())
+        server.sendmail(msg["From"], receptor_mail_list, msg.as_string())
         print(f"El mensaje se envio correctamente a la direccion {receptor_mail_list}")
         server.quit()
+        return 0
     except Exception as err:
-        print("Error: "+ str(err))
+        print("Error: " + str(err))
         server.quit()
+        return 1
 
 # Main
 if __name__ == "__main__":
